@@ -1,0 +1,53 @@
+.app-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: white;
+  padding: 1rem;
+  box-sizing: border-box;
+  margin: 0px;
+}
+body {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* Card style */
+.landing-card {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 2.5rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  max-width: 400px;
+  text-align: center;
+}
+
+/* File input styling */
+.file-input {
+  margin-top: .5rem;
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* Upload button */
+.upload-btn {
+  margin-top: 1rem;
+  width: 100%;
+  background-color: #23d5ab;
+  color: #000;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.upload-btn:hover {
+  background-color: #20b995;
+}
