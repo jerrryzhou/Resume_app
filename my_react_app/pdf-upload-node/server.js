@@ -3,6 +3,8 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
+// import { GoogleGenAI } from "@google/genai";
+// Use REST api instead
 
 const app = express();
 const PORT = 3000;
@@ -67,7 +69,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
   });
 });
 
-  res.status(200).json({ message: 'PDF uploaded successfully', file: req.file.filename });
+  // res.status(200).json({ message: 'PDF uploaded successfully', file: req.file.filename });
 });
 
 app.listen(PORT, () => {
