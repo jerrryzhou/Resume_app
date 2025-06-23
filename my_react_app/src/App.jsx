@@ -54,7 +54,7 @@ function App() {
         <input type="file" onChange={(e) => setFile(e.target.files[0])} className="file-input" />
         <button className="upload-btn" onClick={handleUpload}>Upload</button>
         <h2>Paste The Job description here</h2>
-        <textarea cols="50" rows="10"></textarea>
+        <textarea onChange={(e) => setDescription(e.target.value)} cols="50" rows="10"></textarea>
       </div>
     </div>
     </>
