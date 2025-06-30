@@ -13,6 +13,22 @@ function App() {
     setDescription(e.target.value);
   };
 
+  const send = async(prompt) => {
+    try {
+      const response = await fetch('http://localhost:3000/ask-gemini', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: prompt })
+    });
+    const data = await response.json();
+    console.log(data.result);
+    }
+    catch(error) {
+      console.log(error);
+    }
+    
+  }
+
 
   const handleUpload = async () => {
     if (!file) {
@@ -27,6 +43,7 @@ function App() {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('description', description);
+
   
 
   try {
@@ -38,6 +55,7 @@ function App() {
     
     const result = await res.json();
     alert(result.message);
+    send(description);
   } catch (err) {
     console.log(err);
     alert('Upload failed');
