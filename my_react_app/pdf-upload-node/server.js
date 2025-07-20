@@ -42,7 +42,14 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage, fileFilter });
 
-app.post('/upload', upload.single('file'), (req, res) => {
+const parseUploadedPDF = async (filePath) => {
+  const pdfBuffer = fs.readFileSync(filePath);
+  const data = await pdfParse(pdfBuffer);
+  fs.unlink(filePath);
+  return data.text;
+};
+
+app.post('/upload', upload.single('file'), async (req, res) => {
   const file = req.file;
   const description = req.body.description;
 
@@ -56,6 +63,8 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
   const jsonFilename = file.filename + '.json';
   const jsonPath = path.join('uploads', jsonFilename);
+
+
 
   // if (!req.file) {
   //   return res.status(400).json({ message: 'No file uploaded or invalid file type' });
@@ -76,6 +85,11 @@ app.post('/upload', upload.single('file'), (req, res) => {
     metadataFile: jsonFilename
   });
 });
+
+   const fileBuffer = fs.readFileSync(file.path);
+    const parsedData = await pdfParse(fileBuffer);
+    const extractedText = parsedData.text;
+    console.log(extractedText);
 
   // res.status(200).json({ message: 'PDF uploaded successfully', file: req.file.filename });
 });
