@@ -89,7 +89,26 @@ app.post('/upload', upload.single('file'), async (req, res) => {
    const fileBuffer = fs.readFileSync(file.path);
     const parsedData = await pdfParse(fileBuffer);
     const extractedText = parsedData.text;
-    console.log(extractedText);
+    // console.log(extractedText);
+
+    const prompt = `You are an expert. Based on the given Resume and Job Description, Tailor the resume and come up with suggestions on how to get through ATS.\n
+    I do not need a description of said role.\n
+    Resume: ${extractedText}\n
+    Job Description: ${description}`;
+    console.log("sending");
+    console.log(prompt);
+
+    const response = await axios.post(
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
+      {
+        contents: [{parts: [{text:prompt}] }]
+      },
+      {
+        params: { key: apikey }
+      }
+    );
+    const aiResponse = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    console.log(aiResponse);
 
   // res.status(200).json({ message: 'PDF uploaded successfully', file: req.file.filename });
 });
