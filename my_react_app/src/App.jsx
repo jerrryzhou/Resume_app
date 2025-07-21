@@ -55,7 +55,7 @@ function App() {
     
     const result = await res.json();
     alert(result.message);
-    send(description);
+    // send(description);
   } catch (err) {
     console.log(err);
     alert('Upload failed');
