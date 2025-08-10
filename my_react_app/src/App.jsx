@@ -35,7 +35,7 @@ function App() {
       alert("Please select a PDF file first");
       return;
     }
-     if (!description.trim()) {
+     if (!description) {
       alert("Job description is required.");
       return;
     }
@@ -52,6 +52,10 @@ function App() {
       method: 'POST',
       body: formData,
     });
+
+    if (res.redirectURL) {
+      window.location.href = res.redirectURL;
+    }
     
     const result = await res.json();
     alert(result.message);

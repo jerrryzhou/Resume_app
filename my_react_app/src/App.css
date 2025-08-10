@@ -67,3 +67,11 @@ body, html, #root {
 .upload-btn:hover {
   background-color: #20b995;
 }
+
+.result {
+  background: #f4f4f4;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+  white-space: pre-wrap; /* Keeps line breaks from Gemini */
+}

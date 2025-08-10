@@ -5,16 +5,25 @@ const fs = require('fs');
 const cors = require('cors');
 const axios = require('axios');
 const pdfParse = require('pdf-parse');
+const session = require('express-session');
 require('dotenv').config();
 const apikey = process.env.GEMINI_API_KEY;
 console.log(apikey);
-// import { GoogleGenAI } from "@google/genai";
-// Use REST api instead
+
 
 const SYSTEM_PROMPT = "You are an expert career advisor and resume optimization specialist.\n\nYour task is to carefully compare a candidate's resume with a specific job description. Based on the comparison, provide clear, actionable suggestions on how the candidate can tailor their resume to better align with the job requirements. If the job description is clearly nonsensical or unrelated to a real job, reply: Job description appears invalid.\n\nFocus on:\n- Highlighting relevant skills, experiences, or keywords that are present in the job description but missing or underemphasized in the resume.\n- Suggesting ways to rephrase existing resume content to better match the language of the job description.\n- Ensuring the suggestions remain truthful to the candidate's actual experience.\n- Keeping your tone professional, encouraging, and concise.\n\nAt the end, return your suggestions in json for easy implementation."
 
 const app = express();
 const PORT = 3000;
+
+app.use(
+  session({
+    secret: "your-secret-key", // change this to something secure
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 5 * 60 * 1000 } // session lasts 5 minutes
+  })
+);
 
 app.use(cors());
 app.use(express.json());
@@ -73,18 +82,20 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   //   return res.status(400).json({ message: 'Job description is required' });
   // }
 
-  fs.writeFile(jsonPath, JSON.stringify(uploadData, null, 2), (err) => {
-  if (err) {
-    console.error('Error saving metadata JSON:', err);
-    return res.status(500).json({ message: 'Failed to save metadata' });
-  }
+//   fs.writeFile(jsonPath, JSON.stringify(uploadData, null, 2), (err) => {
+//   if (err) {
+//     console.error('Error saving metadata JSON:', err);
+//     return res.status(500).json({ message: 'Failed to save metadata' });
+//   }
 
-  res.status(200).json({
-    message: 'PDF and description uploaded successfully',
-    file: req.file.filename,
-    metadataFile: jsonFilename
-  });
-});
+//   res.status(200).json({
+//     message: 'PDF and description uploaded successfully',
+//     file: req.file.filename,
+//     metadataFile: jsonFilename
+//   });
+// });
+
+  fs.writeFileSync(jsonPath, JSON.stringify(uploadData, null, 2));
 
    const fileBuffer = fs.readFileSync(file.path);
     const parsedData = await pdfParse(fileBuffer);
@@ -108,8 +119,9 @@ app.post('/upload', upload.single('file'), async (req, res) => {
       }
     );
     const aiResponse = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    req.session.aiResponse = aiResponse;
     console.log(aiResponse);
-
+    return res.json({ success: true, redirectUrl: '/page' });
   // res.status(200).json({ message: 'PDF uploaded successfully', file: req.file.filename });
 });
 
@@ -143,7 +155,10 @@ app.post('/ask-gemini', async (req, res) => {
     const result = response.data;
     res.json({result});
     const generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+    req.session.generatedText = generatedText;
     console.log(generatedText);
+    console.log('test');
+    
   }
   catch(error) {
   console.error('Gemini API Error:', error.response?.data || error.message);
@@ -151,6 +166,7 @@ app.post('/ask-gemini', async (req, res) => {
   
   }
 });
+
 async function createContext(prompt) {
   try {
     const message = [
