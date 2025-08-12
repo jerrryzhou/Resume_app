@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 
-function App() {
+function Page() {
     return (
       <>
       <h1 className='welcome'>Results</h1>
@@ -14,4 +14,4 @@ function App() {
     </>
   );
 }
-export default App;
+export default Page;

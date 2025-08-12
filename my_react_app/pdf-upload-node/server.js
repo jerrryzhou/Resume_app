@@ -29,6 +29,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../dist')));
 
+
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadPath = 'uploads/';
@@ -126,17 +128,18 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 });
 
 
-app.listen(PORT, async () => {
-  console.log(`Server listening on http://localhost:${PORT}`);
-  console.log('Sending system prompt to Gemini API on startup...');
-    const suggestions = await createContext(SYSTEM_PROMPT);
 
-    if (suggestions) {
-        console.log('Startup response from Gemini:', suggestions);
-    } else {
-        console.log('Failed to get startup response.');
-    }
-});
+// app.listen(PORT, async () => {
+//   console.log(`Server listening on http://localhost:${PORT}`);
+//   console.log('Sending system prompt to Gemini API on startup...');
+//     const suggestions = await createContext(SYSTEM_PROMPT);
+
+//     if (suggestions) {
+//         console.log('Startup response from Gemini:', suggestions);
+//     } else {
+//         console.log('Failed to get startup response.');
+//     }
+// });
 
 app.post('/ask-gemini', async (req, res) => {
   const { prompt } = req.body;
@@ -252,3 +255,19 @@ app.post('/upload-resume', upload.single('file'), async (req, res) => {
     res.status(500).json({ error: 'Failed to parse PDF' });
   }
 })
+
+app.get('/page', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
+});
+
+app.listen(PORT, async () => {
+  console.log(`Server listening on http://localhost:${PORT}`);
+  console.log('Sending system prompt to Gemini API on startup...');
+    const suggestions = await createContext(SYSTEM_PROMPT);
+
+    if (suggestions) {
+        console.log('Startup response from Gemini:', suggestions);
+    } else {
+        console.log('Failed to get startup response.');
+    }
+});
