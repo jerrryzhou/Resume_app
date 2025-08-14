@@ -70,8 +70,14 @@ body, html, #root {
 
 .result {
   background: #f4f4f4;
+  color: black;
   padding: 15px;
   border-radius: 8px;
   margin-top: 20px;
   white-space: pre-wrap; /* Keeps line breaks from Gemini */
+}
+
+.upload-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

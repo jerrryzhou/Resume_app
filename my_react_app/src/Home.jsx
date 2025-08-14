@@ -4,6 +4,7 @@ import { useState } from 'react'
 function Home() {
   const [file, setFile] = useState(null);
   const [description, setDescription] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -31,12 +32,18 @@ function Home() {
 
 
   const handleUpload = async () => {
+
+    if (loading) return; // prevent double click
+    setLoading(true);
+
     if (!file) {
       alert("Please select a PDF file first");
+      setLoading(false);
       return;
     }
      if (!description) {
       alert("Job description is required.");
+      setLoading(false);
       return;
     }
 
@@ -59,10 +66,12 @@ function Home() {
       window.location.href = result.redirectUrl;
     }
     alert(result.message);
+    setLoading(false);
     // send(description);
   } catch (err) {
     console.log(err);
     alert('Upload failed');
+    setLoading(false);
   }
 } // Button needs to save test too
 
@@ -74,7 +83,7 @@ function Home() {
         <h1>Upload your Resume Below</h1>
         {/* <p>Upload your file below to get started.</p> */}
         <input type="file" onChange={(e) => setFile(e.target.files[0])} className="file-input" />
-        <button className="upload-btn" onClick={handleUpload}>Upload</button>
+        <button className="upload-btn" onClick={handleUpload} disabled={loading}>Upload</button>
         <h2>Paste The Job description here</h2>
         <textarea onChange={(e) => setDescription(e.target.value)} cols="50" rows="10"></textarea>
       </div>

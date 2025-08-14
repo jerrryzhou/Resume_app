@@ -256,6 +256,10 @@ app.post('/upload-resume', upload.single('file'), async (req, res) => {
   }
 })
 
+app.get("/api/ai-response", (req, res) => {
+  res.json({ response: req.session.aiResponse || null });
+});
+
 app.get('/page', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist', 'index.html'));
 });
