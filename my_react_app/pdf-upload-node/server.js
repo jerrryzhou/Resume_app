@@ -264,6 +264,10 @@ app.get('/page', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist', 'index.html'));
 });
 
+app.get('/page', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
+});
+
 app.listen(PORT, async () => {
   console.log(`Server listening on http://localhost:${PORT}`);
   console.log('Sending system prompt to Gemini API on startup...');
