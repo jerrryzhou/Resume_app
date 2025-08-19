@@ -264,7 +264,7 @@ app.get('/page', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist', 'index.html'));
 });
 
-app.get('/page', (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist', 'index.html'));
 });
 
